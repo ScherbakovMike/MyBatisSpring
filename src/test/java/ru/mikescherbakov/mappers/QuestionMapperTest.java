@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import ru.mikescherbakov.configuration.MyBatisConfig;
+import ru.mikescherbakov.models.Question;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ContextConfiguration(classes = MyBatisConfig.class)
@@ -17,8 +17,29 @@ class QuestionMapperTest {
 
     @Test
     void whenRecordsInDatabase_recordFieldsAreCorrect() {
-        var question = questionMapper.getQuestion(1);
+        var question = questionMapper.getQuestionById(1);
         assertNotNull(question);
         assertFalse(question.getTitle().isBlank());
+    }
+
+    @Test
+    void insertNewQuestion_QuestionAddedRemovedCorrectly() {
+        var testTitle = "test title";
+        var testContent = "test content";
+        var question = questionMapper.getQuestionByTitle(testTitle);
+        assertNull(question);
+
+        question = new Question();
+        question.setTitle(testTitle);
+        question.setContent(testContent);
+        questionMapper.addQuestion(question);
+
+        question = questionMapper.getQuestionByTitle(testTitle);
+        assertNotNull(question);
+
+        questionMapper.removeQuestion(testTitle);
+        question = questionMapper.getQuestionByTitle(testTitle);
+        assertNull(question);
+
     }
 }
