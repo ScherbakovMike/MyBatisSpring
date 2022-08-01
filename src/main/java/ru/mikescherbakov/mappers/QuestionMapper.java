@@ -15,7 +15,7 @@ public interface QuestionMapper {
     @Select("SELECT * FROM QUESTIONS WHERE id = #{id}")
     Question getQuestionById(@Param("id") Integer id);
 
-    @Select("SELECT * FROM QUESTIONS WHERE id = #{id}")
+    @Select("SELECT * FROM QUESTIONS WHERE title = #{title}")
     Question getQuestionByTitle(@Param("title") String title);
 
 
